@@ -74,3 +74,15 @@ def loadVideosCategory(catalog):
 # Funciones de ordenamiento
 
 # Funciones de consulta sobre el catálogo
+
+def categoryIdSize(catalog):
+    """
+    Numero de libros cargados al catalogo
+    """
+    return model.categoryIdSize(catalog)
+    
+def videoSize(catalog):
+    """
+    Numero de libros cargados al catalogo
+    """
+    return model.videoSize(catalog)

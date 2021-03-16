@@ -69,7 +69,8 @@ while True:
         print("Cargando información de los archivos ....")
         catalog = initCatalog()
         loadData(catalog)
-        print(separador())
+        print (controller.videoSize(catalog["video"]))
+        print (controller.categoryIdSize(catalog["video_id"]))
 
     elif int(inputs[0]) == 2:
         pass

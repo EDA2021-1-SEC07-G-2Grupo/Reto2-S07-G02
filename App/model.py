@@ -36,6 +36,8 @@ assert cf
 Se define la estructura de un catálogo de videos. El catálogo tendrá dos listas, una para los videos, otra para las categorias de
 los mismos.
 """
+# Construccion de modelos
+
 def newCatalog():
     """ Inicializa el catálogo de libros
 
@@ -51,8 +53,6 @@ def newCatalog():
     """
     catalog = {'video': None,
                'video_id': None,
-               'category': None,
-               'Country': None,
               }
 
     """
@@ -61,7 +61,7 @@ def newCatalog():
     ordenados por ningun criterio.  Son referenciados
     por los indices creados a continuacion.
     """
-    catalog['video'] = lt.newList('ARRAY_LIST', comparevideoIds)
+    catalog['video'] = lt.newList('SINGLE_LINKED', comparevideoIds)
 
     """
     A continuacion se crean indices por diferentes criterios
@@ -73,32 +73,49 @@ def newCatalog():
     """
     Este indice crea un map cuya llave es el identificador del libro
     """
-    catalog['video_id'] = mp.newMap(10000,
+    catalog['video_id'] = mp.newMap(49,
                                    maptype='CHAINING',
                                    loadfactor=4.0,
                                    comparefunction=compareMapBookIds)
-
-    """
-    Este indice crea un map cuya llave es el autor del libro
-    """
-    catalog['category'] = mp.newMap(53,
-                                   maptype='CHAINING',
-                                   loadfactor=4.0,
-                                   comparefunction=compareAuthorsByName)
-    """
-    Este indice crea un map cuya llave es la etiqueta
-    """
-    catalog['Country'] = mp.newMap(11,
-                                maptype='PROBING',
-                                loadfactor=0.5,
-                                comparefunction=compareTagNames)
-    
 
     return catalog
 
 
 
+
+# Funciones para creacion de datos
+
+def newVidcategoria(name, id):
+    """
+    Esta estructura crea una relación entre un tag y los libros que han sido
+    marcados con dicho tag.  Se guarga el total de libros y una lista con
+    dichos libros.
+    """
+    categoriavid = {'id': id, 'category_id': name}
+    return categoriavid
 # Funciones para agregar informacion al catalogo
+def addVideo(catalog, videos):
+    """
+    Esta funcion adiciona un libro a la lista de libros,
+    adicionalmente lo guarda en un Map usando como llave su Id.
+    Adicionalmente se guarda en el indice de autores, una referencia
+    al libro.
+    Finalmente crea una entrada en el Map de años, para indicar que este
+    libro fue publicaco en ese año.
+    """
+    lt.addLast(catalog['video'], videos)
+    mp.put(catalog['video_id'], videos['video_id'], videos)
+    
+
+
+def addVideoCategory_id(catalog, category):
+    """
+    Adiciona un tag a la tabla de tags dentro del catalogo y se
+    actualiza el indice de identificadores del tag.
+    """
+
+    newtag = newVidcategoria(category['id'], category['name'])
+    mp.put(catalog['video_id'], category['id'], newtag)
 
 
 
@@ -143,13 +160,23 @@ def compareTagNames(name, tag):
 
 
 
-# Construccion de modelos
 
-# Funciones para agregar informacion al catalogo
 
-# Funciones para creacion de datos
+
 
 # Funciones de consulta
+def categoryIdSize(catalog):
+    """
+    Número de libros en el catago
+    """
+    return mp.size(catalog['video_id'])
+
+def videoSize(catalog):
+    """
+    Número de libros en el catago
+    """
+    return lt.size(catalog['video'])
+
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
