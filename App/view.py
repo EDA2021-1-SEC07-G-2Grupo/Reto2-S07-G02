@@ -25,6 +25,7 @@ import sys
 import controller
 from DISClib.ADT import list as lt
 assert cf
+from DISClib.ADT import map as mp
 
 
 """
@@ -32,8 +33,22 @@ La vista se encarga de la interacción con el usuario
 Presenta el menu de opciones y por cada seleccion
 se hace la solicitud al controlador para ejecutar la
 operación solicitada
-"""
 
+"""
+def imprime_toda_lista_econtrada_req1(catalog):
+     n=0
+     while n<lt.size(catalog):
+            video_ordenado=lt.getElement(catalog,n)
+            print("Posición: "+str(1+n))
+            print("-"+"Trending_date: "+video_ordenado["trending_date"])
+            print("-"+"Title: "+video_ordenado["title"])
+            print("-"+"Chanel_title: "+video_ordenado["channel_title"])
+            print("-"+"Publish_time: "+video_ordenado["publish_time"])
+            print("-"+"Views: "+video_ordenado["views"])
+            print("-"+"Likes: "+video_ordenado["likes"])
+            print("-"+"Dislikes: "+video_ordenado["dislikes"])
+            print(separador())
+            n+=1
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo") 
@@ -69,11 +84,23 @@ while True:
         print("Cargando información de los archivos ....")
         catalog = controller.initCatalog()
         controller.loadData(catalog)
-        print ("Videos Cargados "+str(controller.videoSize(catalog)))
-        print ("Categorias cargadas "+str(controller.categoryIdSize(catalog)))
-
+        print ("Videos Cargados "+str(controller.sizeLista(catalog["video"])))
+        print ("Categorias cargadas "+str(controller.sizeMapas(catalog["category_id"])))
+        
+       
     elif int(inputs[0]) == 2:
-        pass
+        pei=str(input("Escriba el nombre del país que desea consultar "))
+        videos_por_pais=(controller.Getalgobycatalogyllave(catalog["country"],pei))
+        vid=videos_por_pais["value"]
+        if vid ["Size"]==0:
+            print("No se ha encontrado ningun video del país "+ str(pei))
+        else:
+            categ=str(input("Escriba el numero de la categoria de los videos que desea consultar "))
+            print(mp.keySet(vid))
+
+    
+        
+         
 
     else:
         sys.exit(0)

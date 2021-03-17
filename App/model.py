@@ -30,6 +30,7 @@ from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from DISClib.Algorithms.Sorting import shellsort as sa
+from DISClib.Algorithms.Sorting import mergesort as merg
 assert cf
 
 """
@@ -39,49 +40,27 @@ los mismos.
 # Construccion de modelos
 
 def newCatalog():
-    """ Inicializa el catálogo de libros
-
-    Crea una lista vacia para guardar todos los videos
-
-    Se crean indices (Maps) por los siguientes criterios:
-    Autores
-    ID libros
-    Tags
-    Año de publicacion
-
-    Retorna el catalogo inicializado.
-    """
+   
     catalog = {'video': None,
                'category_id': None,
                'country': None,
+               "videos_by_category_id":None
               }
+    catalog['video'] = lt.newList('ARRAY_LIST', comparevideoIds)
 
-    """
-    Esta lista contiene todo los libros encontrados
-    en los archivos de carga.  Estos libros no estan
-    ordenados por ningun criterio.  Son referenciados
-    por los indices creados a continuacion.
-    """
-    catalog['video'] = lt.newList('SINGLE_LINKED', comparevideoIds)
 
-    """
-    A continuacion se crean indices por diferentes criterios
-    para llegar a la informacion consultada.  Estos indices no
-    replican informacion, solo referencian los libros de la lista
-    creada en el paso anterior.
-    """
-
-    """
-    Este indice crea un map cuya llave es el identificador del libro
-    """
-    catalog['category_id'] = mp.newMap(49,
+    catalog['category_id'] = mp.newMap(39,
                                    maptype='CHAINING',
                                    loadfactor=4.0,
-                                   comparefunction=compareMapBookIds)
+                                   comparefunction=comparebyName)
     catalog['country'] = mp.newMap(17,
                                    maptype='CHAINING',
                                    loadfactor=4.0,
-                                   comparefunction=compareMapBookIds)
+                                   comparefunction=comparebyName)
+    catalog['videos_by_category_id'] = mp.newMap(39,
+                                   maptype='CHAINING',
+                                   loadfactor=4.0,
+                                   comparefunction=comparebyINt)
 
     return catalog
 
@@ -97,10 +76,10 @@ def newCountry(name):
     """
     Country = {'name': "",
               "video": None,
-              "dias": 0,
+              "Size": 0,
               }
     Country['name'] = name
-    Country['video'] = lt.newList('SINGLE_LINKED', compareCountryByName)
+    Country['video'] = lt.newList('ARRAY_LIST', compareCountryByName)
     return Country
 
 def newVidcategoria(name, id):
@@ -127,12 +106,13 @@ def addVideosCountry(catalog, pais, videos):
         country = newCountry(pais)
         mp.put(countries, pais, country)
     lt.addLast(country['video'], videos)
-    country['dias'] += 1
+    country['Size'] += 1
 
 def addVideoCategory_id(catalog, category):
 
     newtag = newVidcategoria(category['id'], category['name'])
     mp.put(catalog['category_id'], category['id'], newtag)
+
 
 
 
@@ -151,7 +131,21 @@ def comparevideoIds(id1, id2):
         return -1
 
 
-def compareMapBookIds(id, entry):
+def comparebyINt(id, entry):
+    """
+    Compara dos ids de libros, id es un identificador
+    y entry una pareja llave-valor
+    """
+    identry = me.getKey(entry)
+    if int(id) == int(identry):
+        return 0
+    elif int(id) > int(identry):
+        return 1
+    else:
+        return -1
+
+
+def comparebyName(id, entry):
     """
     Compara dos ids de libros, id es un identificador
     y entry una pareja llave-valor
@@ -187,27 +181,29 @@ def compareCountryByName(keyname, pais):
         return 1
     else:
         return -1
+def cmpVideosByalgo(video1, video2,algo):
 
-
-
-
+    return (float(video1[algo]) > float(video2[algo]))
 
 
 
 # Funciones de consulta
-def categoryIdSize(catalog):
-    """
-    Número de libros en el catago
-    """
-    return mp.size(catalog['category_id'])
 
-def videoSize(catalog):
-    """
-    Número de libros en el catago
-    """
-    return lt.size(catalog['video'])
+
+
+def Getalgobycatalogyllave(catalog, pais): 
+    return mp.get(catalog,pais)
+
+
+
 
 
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 # Funciones de ordenamiento
+
+def videos_por_algo(catalog,size,algo):
+    sub_list = lt.subList(catalog,1, size)
+    sub_list = sub_list.copy()
+    sorted_list=merg.sort(sub_list, cmpVideosByalgo())
+    return  sorted_list

@@ -23,6 +23,8 @@
 import config as cf
 import model
 import csv
+from DISClib.ADT import list as lt
+from DISClib.ADT import map as mp
 
 
 """
@@ -72,17 +74,22 @@ def loadVideosCategory(catalog):
 # Funciones para la carga de datos
 
 # Funciones de ordenamiento
+def videos_por_algo(catalog,size,algo):
+    return model.videos_por_algo(catalog,size,algo)
 
 # Funciones de consulta sobre el catálogo
 
-def categoryIdSize(catalog):
+def sizeMapas(catalog):
     """
-    Numero de libros cargados al catalogo
+    Número de libros en el catago
     """
-    return model.categoryIdSize(catalog)
-    
-def videoSize(catalog):
+    return mp.size(catalog)
+
+def sizeLista(catalog):
     """
-    Numero de libros cargados al catalogo
+    Número de libros en el catago
     """
-    return model.videoSize(catalog)
+    return lt.size(catalog)
+
+def Getalgobycatalogyllave(catalog, pais):
+    return model.Getalgobycatalogyllave(catalog,pais)
