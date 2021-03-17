@@ -104,23 +104,12 @@ def newCountry(name):
     return Country
 
 def newVidcategoria(name, id):
-    """
-    Esta estructura crea una relación entre un tag y los libros que han sido
-    marcados con dicho tag.  Se guarga el total de libros y una lista con
-    dichos libros.
-    """
+
     categoriavid = {'id': id, 'category_id': name}
     return categoriavid
 # Funciones para agregar informacion al catalogo
 def addVideo(catalog, videos):
-    """
-    Esta funcion adiciona un libro a la lista de libros,
-    adicionalmente lo guarda en un Map usando como llave su Id.
-    Adicionalmente se guarda en el indice de autores, una referencia
-    al libro.
-    Finalmente crea una entrada en el Map de años, para indicar que este
-    libro fue publicaco en ese año.
-    """
+
     lt.addLast(catalog['video'], videos)
     mp.put(catalog['category_id'], videos['category_id'], videos)
     country = videos['country'].split(",")  # Se obtienen los autores
@@ -128,11 +117,7 @@ def addVideo(catalog, videos):
         addVideosCountry(catalog, pais.strip(), videos)
     
 def addVideosCountry(catalog, pais, videos):
-    """
-    Esta función adiciona un libro a la lista de libros publicados
-    por un autor.
-    Cuando se adiciona el libro se actualiza el promedio de dicho autor
-    """
+
     countries = catalog['country']
     existenciacountry = mp.contains(countries, pais)
     if existenciacountry:
@@ -145,10 +130,6 @@ def addVideosCountry(catalog, pais, videos):
     country['dias'] += 1
 
 def addVideoCategory_id(catalog, category):
-    """
-    Adiciona un tag a la tabla de tags dentro del catalogo y se
-    actualiza el indice de identificadores del tag.
-    """
 
     newtag = newVidcategoria(category['id'], category['name'])
     mp.put(catalog['category_id'], category['id'], newtag)
