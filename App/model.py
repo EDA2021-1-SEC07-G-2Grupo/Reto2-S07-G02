@@ -52,7 +52,8 @@ def newCatalog():
     Retorna el catalogo inicializado.
     """
     catalog = {'video': None,
-               'video_id': None,
+               'category_id': None,
+               'country': None,
               }
 
     """
@@ -73,7 +74,11 @@ def newCatalog():
     """
     Este indice crea un map cuya llave es el identificador del libro
     """
-    catalog['video_id'] = mp.newMap(49,
+    catalog['category_id'] = mp.newMap(49,
+                                   maptype='CHAINING',
+                                   loadfactor=4.0,
+                                   comparefunction=compareMapBookIds)
+    catalog['country'] = mp.newMap(17,
                                    maptype='CHAINING',
                                    loadfactor=4.0,
                                    comparefunction=compareMapBookIds)
@@ -84,6 +89,19 @@ def newCatalog():
 
 
 # Funciones para creacion de datos
+def newCountry(name):
+    """
+    Crea una nueva estructura para modelar los libros de un autor
+    y su promedio de ratings. Se crea una lista para guardar los
+    libros de dicho autor.
+    """
+    Country = {'name': "",
+              "video": None,
+              "dias": 0,
+              }
+    Country['name'] = name
+    Country['video'] = lt.newList('SINGLE_LINKED', compareCountryByName)
+    return Country
 
 def newVidcategoria(name, id):
     """
@@ -104,9 +122,27 @@ def addVideo(catalog, videos):
     libro fue publicaco en ese año.
     """
     lt.addLast(catalog['video'], videos)
-    mp.put(catalog['video_id'], videos['video_id'], videos)
+    mp.put(catalog['category_id'], videos['category_id'], videos)
+    country = videos['country'].split(",")  # Se obtienen los autores
+    for pais in country:
+        addVideosCountry(catalog, pais.strip(), videos)
     
-
+def addVideosCountry(catalog, pais, videos):
+    """
+    Esta función adiciona un libro a la lista de libros publicados
+    por un autor.
+    Cuando se adiciona el libro se actualiza el promedio de dicho autor
+    """
+    countries = catalog['country']
+    existenciacountry = mp.contains(countries, pais)
+    if existenciacountry:
+        entry = mp.get(countries, pais)
+        country = me.getValue(entry)
+    else:
+        country = newCountry(pais)
+        mp.put(countries, pais, country)
+    lt.addLast(country['video'], videos)
+    country['dias'] += 1
 
 def addVideoCategory_id(catalog, category):
     """
@@ -115,7 +151,7 @@ def addVideoCategory_id(catalog, category):
     """
 
     newtag = newVidcategoria(category['id'], category['name'])
-    mp.put(catalog['video_id'], category['id'], newtag)
+    mp.put(catalog['category_id'], category['id'], newtag)
 
 
 
@@ -140,9 +176,9 @@ def compareMapBookIds(id, entry):
     y entry una pareja llave-valor
     """
     identry = me.getKey(entry)
-    if (int(id) == int(identry)):
+    if (id) == identry:
         return 0
-    elif (int(id) > int(identry)):
+    elif (id > identry):
         return 1
     else:
         return -1
@@ -158,6 +194,19 @@ def compareTagNames(name, tag):
     else:
         return -1
 
+def compareCountryByName(keyname, pais):
+    """
+    Compara dos nombres de autor. El primero es una cadena
+    y el segundo un entry de un map
+    """
+    country = me.getKey(pais)
+    if (keyname == country):
+        return 0
+    elif (keyname > country):
+        return 1
+    else:
+        return -1
+
 
 
 
@@ -169,7 +218,7 @@ def categoryIdSize(catalog):
     """
     Número de libros en el catago
     """
-    return mp.size(catalog['video_id'])
+    return mp.size(catalog['category_id'])
 
 def videoSize(catalog):
     """

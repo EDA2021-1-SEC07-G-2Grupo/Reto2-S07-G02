@@ -67,10 +67,10 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     if int(inputs[0]) == 1:
         print("Cargando información de los archivos ....")
-        catalog = initCatalog()
-        loadData(catalog)
-        print (controller.videoSize(catalog["video"]))
-        print (controller.categoryIdSize(catalog["video_id"]))
+        catalog = controller.initCatalog()
+        controller.loadData(catalog)
+        print ("Videos Cargados "+str(controller.videoSize(catalog)))
+        print ("Categorias cargadas "+str(controller.categoryIdSize(catalog)))
 
     elif int(inputs[0]) == 2:
         pass
