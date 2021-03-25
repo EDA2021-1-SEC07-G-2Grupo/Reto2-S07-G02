@@ -181,9 +181,7 @@ def compareCountryByName(keyname, pais):
         return 1
     else:
         return -1
-def cmpVideosByalgo(video1, video2,algo):
 
-    return (float(video1[algo]) > float(video2[algo]))
 
 
 
@@ -198,12 +196,21 @@ def Getalgobycatalogyllave(catalog, pais):
 
 
 
+
+
+
+
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 # Funciones de ordenamiento
 
-def videos_por_algo(catalog,size,algo):
-    sub_list = lt.subList(catalog,1, size)
+def videos_por_algo(catalog,size):
+    
+    def cmpVideosByalgo(video1, video2):
+
+        return (float(video1["views"]) > float(video2["views"]))
+
+    sub_list = lt.subList(catalog,0, size)
     sub_list = sub_list.copy()
-    sorted_list=merg.sort(sub_list, cmpVideosByalgo())
+    sorted_list=merg.sort(sub_list, cmpVideosByalgo)
     return  sorted_list

@@ -25,7 +25,7 @@ import model
 import csv
 from DISClib.ADT import list as lt
 from DISClib.ADT import map as mp
-
+from DISClib.Algorithms.Sorting import mergesort as merg
 
 """
 El controlador se encarga de mediar entre la vista y el modelo.
@@ -74,8 +74,8 @@ def loadVideosCategory(catalog):
 # Funciones para la carga de datos
 
 # Funciones de ordenamiento
-def videos_por_algo(catalog,size,algo):
-    return model.videos_por_algo(catalog,size,algo)
+def videos_por_algo(catalog,size):
+    return model.videos_por_algo(catalog,size)
 
 # Funciones de consulta sobre el catálogo
 
@@ -93,3 +93,21 @@ def sizeLista(catalog):
 
 def Getalgobycatalogyllave(catalog, pais):
     return model.Getalgobycatalogyllave(catalog,pais)
+
+
+def Getvideosbycateg(catalog,numero):
+    lista_filtrada=lt.newList("ARRAY_LIST")
+    i = 0
+    while i < lt.size(catalog["value"]["video"]):
+        wow=lt.getElement(catalog["value"]["video"],i)
+        if numero==wow["category_id"] or str(numero)== wow ["category_id"]:
+            lt.addLast(lista_filtrada, wow)
+        i+=1
+   #def comparecategorynames(numero, wow):
+        #return (numero == wow["category_id"])
+    #lista_filtrada=lt.newList("ARRAY_LIST",cmpfunction=comparecategorynames)"""
+    return lista_filtrada
+
+
+
+

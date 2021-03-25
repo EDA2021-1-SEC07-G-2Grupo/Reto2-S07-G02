@@ -35,7 +35,12 @@ se hace la solicitud al controlador para ejecutar la
 operación solicitada
 
 """
+def print_separador():
+    print("-----------------------------------------------(￣(工)￣)--------------------------------------------")
+
+
 def imprime_toda_lista_econtrada_req1(catalog):
+    print(print_separador())
      n=0
      while n<lt.size(catalog):
             video_ordenado=lt.getElement(catalog,n)
@@ -47,8 +52,9 @@ def imprime_toda_lista_econtrada_req1(catalog):
             print("-"+"Views: "+video_ordenado["views"])
             print("-"+"Likes: "+video_ordenado["likes"])
             print("-"+"Dislikes: "+video_ordenado["dislikes"])
-            print(separador())
+            print(print_separador())
             n+=1
+
 def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo") 
@@ -80,25 +86,46 @@ Menu principal
 while True:
     printMenu()
     inputs = input('Seleccione una opción para continuar\n')
+
+
     if int(inputs[0]) == 1:
+
+
         print("Cargando información de los archivos ....")
         catalog = controller.initCatalog()
         controller.loadData(catalog)
         print ("Videos Cargados "+str(controller.sizeLista(catalog["video"])))
         print ("Categorias cargadas "+str(controller.sizeMapas(catalog["category_id"])))
-        
-       
-    elif int(inputs[0]) == 2:
-        pei=str(input("Escriba el nombre del país que desea consultar "))
-        videos_por_pais=(controller.Getalgobycatalogyllave(catalog["country"],pei))
-        vid=videos_por_pais["value"]
-        if vid ["Size"]==0:
-            print("No se ha encontrado ningun video del país "+ str(pei))
-        else:
-            categ=str(input("Escriba el numero de la categoria de los videos que desea consultar "))
-            print(mp.keySet(vid))
 
-    
+
+    elif int(inputs[0]) == 2:
+
+
+        pei=str(input("Escriba el nombre del país que desea consultar \n"))
+        if mp.contains(catalog["country"], pei)== False:
+            print_separador()
+            print("No se ha encontrado ningun video del país "+ str(pei))
+            print_separador()
+        else:
+            videos_por_pais=(controller.Getalgobycatalogyllave(catalog["country"],pei))
+            categ=str(input("Escriba el numero de la categoria de los videos que desea consultar \n"))
+            if mp.contains(catalog["category_id"],str(categ))==False:
+                print_separador()
+                print("No se ha encontrado ninguna categoría "+ str (categ))
+                print_separador()
+            else:
+                Vids_por_pais_categ=controller.Getvideosbycateg(videos_por_pais,categ)
+                if lt.isEmpty(Vids_por_pais_categ)==True:
+                    print(lt.size(Vids_por_pais_categ))
+                    print("No se ha encontrado videos de la categoría "+str(categ)+ " del país "+ str(pei))
+                else:
+                    print("Se ha encontrado un total de "+ str(lt.size(Vids_por_pais_categ))+ " videos.")
+                    n=int(input("Escriba la cantidad de videos que desea consultar\n"))
+                    lista_organizada=controller.videos_por_algo(Vids_por_pais_categ,n)
+                    imprime_toda_lista_econtrada_req1(lista_organizada)
+
+                
+
         
          
 
