@@ -36,7 +36,7 @@ operación solicitada
 
 """
 def print_separador():
-    print("-----------------------------------------------(￣(工)￣)--------------------------------------------")
+    print("-----------------------------------------------(°(工)°)--------------------------------------------")
 
 
 def imprime_toda_lista_econtrada_req1(catalog):
@@ -98,7 +98,7 @@ while True:
 
     if int(inputs[0]) == 1:
 
-
+        print_separador()    
         print("Cargando información de los archivos ....")
         catalog = controller.initCatalog()
         controller.loadData(catalog)
@@ -108,6 +108,7 @@ while True:
 
     elif int(inputs[0]) == 2:
 
+         print_separador()    
         pei=str(input("Escriba el nombre del país que desea consultar \n"))
         if mp.contains(catalog["country"], pei)== False:
             print_separador()
@@ -133,6 +134,9 @@ while True:
 
 
     elif int(inputs[0]) == 4:
+
+        
+         print_separador()    
         categoria=str(input("Ingrese la categoría que desea consultar \n"))
         if mp.contains(catalog["videos_by_category_id"],str(categoria))==False:
             print_separador()
