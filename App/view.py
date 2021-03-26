@@ -100,15 +100,18 @@ while True:
 
         print_separador()    
         print("Cargando información de los archivos ....")
+        
         catalog = controller.initCatalog()
-        controller.loadData(catalog)
+        espacio_tiempo=controller.loadData(catalog)
         print ("Videos Cargados "+str(controller.sizeLista(catalog["video"])))
         print ("Categorias cargadas "+str(controller.sizeMapas(catalog["category_id"])))
-
+        
+        print("Tiempo [ms]: ", f"{espacio_tiempo[0]:.3f}", "  ||  ",
+              "Memoria [kB]: ", f"{espacio_tiempo[1]:.3f}")
 
     elif int(inputs[0]) == 2:
 
-         print_separador()    
+        print_separador()    
         pei=str(input("Escriba el nombre del país que desea consultar \n"))
         if mp.contains(catalog["country"], pei)== False:
             print_separador()
@@ -136,7 +139,7 @@ while True:
     elif int(inputs[0]) == 4:
 
         
-         print_separador()    
+        print_separador()    
         categoria=str(input("Ingrese la categoría que desea consultar \n"))
         if mp.contains(catalog["videos_by_category_id"],str(categoria))==False:
             print_separador()
