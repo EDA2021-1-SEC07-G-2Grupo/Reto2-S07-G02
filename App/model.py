@@ -50,16 +50,16 @@ def newCatalog():
 
 
     catalog['category_id'] = mp.newMap(39,
-                                   maptype='CHAINING',
-                                   loadfactor=4.0,
+                                   maptype='PROBING',
+                                   loadfactor=0.8,
                                    comparefunction=comparebyName)
     catalog['country'] = mp.newMap(17,
-                                   maptype='CHAINING',
-                                   loadfactor=4.0,
+                                   maptype='PROBING',
+                                   loadfactor=0.8,
                                    comparefunction=comparebyName)
     catalog['videos_by_category_id'] = mp.newMap(39,
-                                   maptype='CHAINING',
-                                   loadfactor=4.0,
+                                   maptype='PROBING',
+                                   loadfactor=0.8,
                                    comparefunction=comparebyINt)
 
     return catalog
