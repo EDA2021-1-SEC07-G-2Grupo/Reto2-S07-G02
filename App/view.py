@@ -41,8 +41,8 @@ def print_separador():
 
 def imprime_toda_lista_econtrada_req1(catalog):
     print(print_separador())
-     n=0
-     while n<lt.size(catalog):
+    n=0
+    while n<lt.size(catalog):
             video_ordenado=lt.getElement(catalog,n)
             print("Posición: "+str(1+n))
             print("-"+"Trending_date: "+video_ordenado["trending_date"])
@@ -54,6 +54,14 @@ def imprime_toda_lista_econtrada_req1(catalog):
             print("-"+"Dislikes: "+video_ordenado["dislikes"])
             print(print_separador())
             n+=1
+
+def print_req3(catalog):
+    vid=lt.firstElement(catalog)
+    print("-"+"Title: "+vid["title"])
+    print("-"+"Channel title: "+vid["channel_title"])
+    print("-"+"Category ID "+vid["category_id"])
+    print("-"+"Días: "+str(vid["views"]))
+   
 
 def printMenu():
     print("Bienvenido")
@@ -100,7 +108,6 @@ while True:
 
     elif int(inputs[0]) == 2:
 
-
         pei=str(input("Escriba el nombre del país que desea consultar \n"))
         if mp.contains(catalog["country"], pei)== False:
             print_separador()
@@ -123,6 +130,23 @@ while True:
                     n=int(input("Escriba la cantidad de videos que desea consultar\n"))
                     lista_organizada=controller.videos_por_algo(Vids_por_pais_categ,n)
                     imprime_toda_lista_econtrada_req1(lista_organizada)
+
+
+    elif int(inputs[0]) == 4:
+        categoria=str(input("Ingrese la categoría que desea consultar \n"))
+        if mp.contains(catalog["videos_by_category_id"],str(categoria))==False:
+            print_separador()
+            print("No se ha encontrado al catgoría "+str(categoria))
+            print_separador()
+        else:
+            Solo_por_categoría=mp.get(catalog["videos_by_category_id"],categoria)
+            lista_organizada=controller.videos_por_algo(Solo_por_categoría["value"]["video"],1)
+            print_separador()
+            print_req3(lista_organizada)
+            print_separador()
+          
+
+        
 
                 
 
