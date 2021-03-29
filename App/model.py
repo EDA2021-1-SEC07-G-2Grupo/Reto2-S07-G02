@@ -103,8 +103,8 @@ def newVidcategoria(name, id):
     categoriavid = {'id': id, 'category_id': name}
     return categoriavid
 # Funciones para agregar informacion al catalogo
-def addVideo(catalog, videos):
-
+def addVideo(catalog, videos,lista_prohibido):
+    
     lt.addLast(catalog['video'], videos)
     mp.put(catalog['category_id'], videos['category_id'], videos)
     country = videos['country'].split(",")  # Se obtienen los paises
@@ -112,7 +112,7 @@ def addVideo(catalog, videos):
     for pais in country:
         addVideosCountry(catalog, pais.strip(), videos)
     for categ in videos_by_category_id:
-        addVideosCategory_id(catalog, categ.strip(), videos)
+        addVideosCategory_id(catalog, categ.strip(), videos,lista_prohibido)
     
 def addVideosCountry(catalog, pais, videos):
 
@@ -128,8 +128,8 @@ def addVideosCountry(catalog, pais, videos):
     country['Size'] += 1
 
 
-def addVideosCategory_id(catalog, catego, videos):
-
+def addVideosCategory_id(catalog, catego, videos,lista_prohibido):
+    
     numcategs = catalog['videos_by_category_id']
     existencicateg = mp.contains(numcategs, catego)
     if existencicateg:
@@ -138,8 +138,19 @@ def addVideosCategory_id(catalog, catego, videos):
     else:
         categ = newcateg(catego)
         mp.put(numcategs, catego, categ)
-    lt.addLast(categ['video'], videos)
-    categ['Size'] += 1
+    ID=videos["video_id"]
+    if ID not in lista_prohibido:
+        dato={"ID": ID,"title":videos["title"], "Channel title": videos["channel_title"],"dias":1}
+        lt.addLast(categ["video"],dato)
+        lista_prohibido.append(ID)
+    else:
+        posicion=lista_prohibido.index(ID)
+        elemento_cambiar=lt.getElement(categ["video"],posicion)
+        elemento_cambiar["dias"]+=1
+        
+
+    
+   
 
 def addVideoCategory_id(catalog, category):
 
@@ -237,24 +248,9 @@ def Getalgobycatalogyllave(catalog, pais):
 
 # Funciones de ordenamiento
 
-def videos_por_algo(catalog,size):
-    
-    def cmpVideosByalgo(video1, video2):
-
-        return (float(video1["views"]) > float(video2["views"]))
-
+def videos_por_algo(catalog,size,comparacion):
     sub_list = lt.subList(catalog,0, size)
     sub_list = sub_list.copy()
-    sorted_list=merg.sort(sub_list, cmpVideosByalgo)
+    sorted_list=merg.sort(sub_list, comparacion)
     return  sorted_list
 
-def videos_por_algo(catalog,size):
-    
-    def cmpVideosByalgo(video1, video2):
-
-        return (float(video1["dias"]) > float(video2["dias"]))
-
-    sub_list = lt.subList(catalog,0, size)
-    sub_list = sub_list.copy()
-    sorted_list=merg.sort(sub_list, cmpVideosByalgo)
-    return  sorted_list

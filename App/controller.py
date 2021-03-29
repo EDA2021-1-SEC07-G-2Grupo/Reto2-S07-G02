@@ -76,8 +76,9 @@ def loadVideos(catalog):
     """
     videosfile = cf.data_dir + 'Videos/videos-large.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
+    lista_prohibido=[]
     for video in input_file:
-        model.addVideo(catalog, video)
+        model.addVideo(catalog,video,lista_prohibido)
 
 
 def loadVideosCategory(catalog):
@@ -92,8 +93,20 @@ def loadVideosCategory(catalog):
 # Funciones para la carga de datos
 
 # Funciones de ordenamiento
-def videos_por_algo(catalog,size):
-    return model.videos_por_algo(catalog,size)
+def videos_por_algo(catalog,size,comparacion):
+    if comparacion=="views":
+        def cmpVideosByviews(video1, video2):
+
+            return (float(video1["views"]) > float(video2["views"]))
+        comparacion=cmpVideosByviews
+    elif comparacion=="dias":
+         def cmpVideosBydias(video1, video2):
+
+             return (float(video1["dias"]) > float(video2["dias"]))
+         comparacion=cmpVideosBydias
+
+
+    return model.videos_por_algo(catalog,size,comparacion)
 
 # Funciones de consulta sobre el catálogo
 

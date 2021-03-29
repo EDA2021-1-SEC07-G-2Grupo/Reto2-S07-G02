@@ -36,7 +36,7 @@ operación solicitada
 
 """
 def print_separador():
-    print("-----------------------------------------------(°(工)°)--------------------------------------------")
+    print("-----------------------------------------------(T(工)T)--------------------------------------------")
 
 
 def imprime_toda_lista_econtrada_req1(catalog):
@@ -56,11 +56,11 @@ def imprime_toda_lista_econtrada_req1(catalog):
             n+=1
 
 def print_req3(catalog):
-    vid=lt.firstElement(catalog)
+    vid=lt.getElement(catalog,1)
     print("-"+"Title: "+vid["title"])
-    print("-"+"Channel title: "+vid["channel_title"])
-    print("-"+"Category ID "+vid["category_id"])
-    print("-"+"Días: "+str(vid["views"]))
+    print("-"+"Channel title: "+vid["Channel title"])
+    print("-"+"Category ID "+vid["ID"])
+    print("-"+"Días: "+str(vid["dias"]))
    
 
 def printMenu():
@@ -132,8 +132,10 @@ while True:
                 else:
                     print("Se ha encontrado un total de "+ str(lt.size(Vids_por_pais_categ))+ " videos.")
                     n=int(input("Escriba la cantidad de videos que desea consultar\n"))
-                    lista_organizada=controller.videos_por_algo(Vids_por_pais_categ,n)
+                    lista_organizada=controller.videos_por_algo(Vids_por_pais_categ,n,"views")
                     imprime_toda_lista_econtrada_req1(lista_organizada)
+    elif int(inputs[0]) == 3:
+        print("req 2")
 
 
     elif int(inputs[0]) == 4:
@@ -143,17 +145,18 @@ while True:
         categoria=str(input("Ingrese la categoría que desea consultar \n"))
         if mp.contains(catalog["videos_by_category_id"],str(categoria))==False:
             print_separador()
-            print("No se ha encontrado al catgoría "+str(categoria))
+            print("No se ha encontrado la catgoría "+str(categoria))
             print_separador()
         else:
             Solo_por_categoría=mp.get(catalog["videos_by_category_id"],categoria)
-            lista_organizada=controller.videos_por_algo(Solo_por_categoría["value"]["video"],1)
+            lista_organizada=controller.videos_por_algo(Solo_por_categoría["value"]["video"],1,"dias")
             print_separador()
             print_req3(lista_organizada)
             print_separador()
           
 
-        
+    elif int(inputs[0]) == 5:
+        print("req 4")
 
                 
 
