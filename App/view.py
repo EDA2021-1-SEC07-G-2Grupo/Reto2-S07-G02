@@ -41,10 +41,10 @@ def print_separador():
 
 def imprime_toda_lista_econtrada_req1(catalog):
     print(print_separador())
-    n=0
-    while n<lt.size(catalog):
+    n=1
+    while n<=lt.size(catalog):
             video_ordenado=lt.getElement(catalog,n)
-            print("Posición: "+str(1+n))
+            print("Posición: "+str(n))
             print("-"+"Trending_date: "+video_ordenado["trending_date"])
             print("-"+"Title: "+video_ordenado["title"])
             print("-"+"Chanel_title: "+video_ordenado["channel_title"])
@@ -59,8 +59,23 @@ def print_req3(catalog):
     vid=lt.getElement(catalog,1)
     print("-"+"Title: "+vid["title"])
     print("-"+"Channel title: "+vid["Channel title"])
-    print("-"+"Category ID "+vid["ID"])
+    print("-"+"Category ID: "+vid["ID"])
     print("-"+"Días: "+str(vid["dias"]))
+
+def print_req4(catalog):
+    n=1
+    print_separador()
+    while lt.size(catalog)>=n:
+            vid=lt.getElement(catalog,n)
+            print("Video "+str(n))
+            print("-"+"Title: "+vid["title"])
+            print("-"+"Chanel_title: "+vid["channel_title"])
+            print("-"+"Publish_time: "+vid["publish_time"])
+            print("-"+"Likes: "+vid["likes"])
+            print("-"+"Dislikes: "+vid["dislikes"])
+            print("-"+"Tags: "+vid["tags"])
+            print_separador()
+            n+=1
    
 
 def printMenu():
@@ -134,6 +149,7 @@ while True:
                     n=int(input("Escriba la cantidad de videos que desea consultar\n"))
                     lista_organizada=controller.videos_por_algo(Vids_por_pais_categ,n,"views")
                     imprime_toda_lista_econtrada_req1(lista_organizada)
+
     elif int(inputs[0]) == 3:
         print("req 2")
 
@@ -156,13 +172,29 @@ while True:
           
 
     elif int(inputs[0]) == 5:
-        print("req 4")
-
-                
-
+        pais=str(input("Escriba el pais que quiere consultar "))
         
+        if mp.contains(catalog["country"],pais)==False:
+            print_separador()
+            print("No se ha encontrado el pais que está cosultado ")
+            print_separador()
+        else:
+            lista_por_pais=mp.get(catalog["country"], pais)
+            categoria_cosultar=str(input("Escriba el tag que desea consultar "))
+            lista_filtrada=controller.get_video_by_tag(lista_por_pais,categoria_cosultar)
+            
+            if lt.size(lista_filtrada)==0:
+                print_separador()
+                print("No se a encontrado ningún video con el tag "+str(categoria_cosultar) )
+                print_separador()
+            else:
+                print("Se ha encontrado un total de "+str(lt.size(lista_filtrada)))
+                n=int(input("Escriba la cantidad de videos que desea consultar "))
+            
+                lista_organizada=controller.videos_por_algo(lista_filtrada,n,"likes")
+                print_req4(lista_organizada)
          
-
+    
     else:
         sys.exit(0)
 sys.exit(0)

@@ -74,11 +74,12 @@ def loadVideos(catalog):
     """
     
     """
-    videosfile = cf.data_dir + 'Videos/videos-large.csv'
+    videosfile = cf.data_dir + 'Videos/videos-small.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
-    lista_prohibido=[]
+    lista_prohibido=lt.newList(datastructure="ARRAY_LIST")
     for video in input_file:
         model.addVideo(catalog,video,lista_prohibido)
+        
 
 
 def loadVideosCategory(catalog):
@@ -103,7 +104,11 @@ def videos_por_algo(catalog,size,comparacion):
          def cmpVideosBydias(video1, video2):
 
              return (float(video1["dias"]) > float(video2["dias"]))
-         comparacion=cmpVideosBydias
+    elif comparacion=="likes":
+         def cmpVideosBylikes(video1, video2):
+
+             return (float(video1["likes"]) > float(video2["likes"]))
+         comparacion=cmpVideosBylikes
 
 
     return model.videos_por_algo(catalog,size,comparacion)
@@ -128,8 +133,8 @@ def Getalgobycatalogyllave(catalog, pais):
 
 def Getvideosbycateg(catalog,numero):
     lista_filtrada=lt.newList("ARRAY_LIST")
-    i = 0
-    while i < lt.size(catalog["value"]["video"]):
+    i = 1
+    while i <= (lt.size(catalog["value"]["video"])):
         wow=lt.getElement(catalog["value"]["video"],i)
         if numero==wow["category_id"] or str(numero)== wow ["category_id"]:
             lt.addLast(lista_filtrada, wow)
@@ -139,6 +144,16 @@ def Getvideosbycateg(catalog,numero):
     #lista_filtrada=lt.newList("ARRAY_LIST",cmpfunction=comparecategorynames)"""
     return lista_filtrada
 
+
+def get_video_by_tag(catalog,tag):
+    lista_filtrada=lt.newList("ARRAY_LIST")
+    i=1
+    while i <= lt.size(catalog["value"]["video"]):
+        a =lt.getElement(catalog["value"]["video"],i)
+        if tag in a["tags"]:
+            lt.addLast(lista_filtrada,a)
+        i+=1
+    return lista_filtrada
 def getTime():
     """
     devuelve el instante tiempo de procesamiento en milisegundos

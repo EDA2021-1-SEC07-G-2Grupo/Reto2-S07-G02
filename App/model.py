@@ -91,7 +91,6 @@ def newcateg(name):
     """
     videos_by_category_id = {'name': "",
               "video": None,
-              "Size": 0,
               }
     videos_by_category_id['name'] = name
     videos_by_category_id['video'] = lt.newList('ARRAY_LIST', compareCountryByName)
@@ -112,7 +111,7 @@ def addVideo(catalog, videos,lista_prohibido):
     for pais in country:
         addVideosCountry(catalog, pais.strip(), videos)
     for categ in videos_by_category_id:
-        addVideosCategory_id(catalog, categ.strip(), videos,lista_prohibido)
+        addVideosCategory_id(catalog, categ.strip(),videos,lista_prohibido)
     
 def addVideosCountry(catalog, pais, videos):
 
@@ -138,18 +137,32 @@ def addVideosCategory_id(catalog, catego, videos,lista_prohibido):
     else:
         categ = newcateg(catego)
         mp.put(numcategs, catego, categ)
-    ID=videos["video_id"]
-    if ID not in lista_prohibido:
-        dato={"ID": ID,"title":videos["title"], "Channel title": videos["channel_title"],"dias":1}
-        lt.addLast(categ["video"],dato)
-        lista_prohibido.append(ID)
-    else:
-        posicion=lista_prohibido.index(ID)
-        elemento_cambiar=lt.getElement(categ["video"],posicion)
-        elemento_cambiar["dias"]+=1
-        
 
+    ID=videos["video_id"]
+    seccion=categ["name"]
+    precencia=lt.isPresent(lista_prohibido,seccion)
     
+    if precencia>0:
+        sector=lt.getElement(lista_prohibido,1)
+        otraprecencia=lt.isPresent(sector,ID)
+
+        if otraprecencia>0:
+            dias_nuevos=lt.getElement(categ["video"],otraprecencia)
+            dias_nuevos["dias"]+=1
+        else:
+            dato={"ID": ID,"title":videos["title"], "Channel title": videos["channel_title"], "country":videos["country"],"dias":1}
+            lt.addLast(categ["video"],dato)
+            actulizacion=lt.getElement(lista_prohibido,precencia)
+            lt.addLast(actulizacion,ID)
+    else:
+        lt.addLast(lista_prohibido,seccion)
+        elemento=lt.lastElement(lista_prohibido)
+        elemento=lt.newList("ARRAY_LIST")
+        lt.addLast(elemento,ID)
+        dato={"ID": ID,"title":videos["title"], "Channel title": videos["channel_title"], "country":videos["country"],"dias":1}
+        lt.addLast(categ["video"],dato)
+        
+   
    
 
 def addVideoCategory_id(catalog, category):
@@ -247,6 +260,8 @@ def Getalgobycatalogyllave(catalog, pais):
 # Funciones utilizadas para comparar elementos dentro de una lista
 
 # Funciones de ordenamiento
+
+
 
 def videos_por_algo(catalog,size,comparacion):
     sub_list = lt.subList(catalog,0, size)
