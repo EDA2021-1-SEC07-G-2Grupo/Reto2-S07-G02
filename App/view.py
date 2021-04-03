@@ -165,7 +165,8 @@ while True:
             print_separador()
         else:
             Solo_por_categoría=mp.get(catalog["videos_by_category_id"],categoria)
-            lista_organizada=controller.videos_por_algo(Solo_por_categoría["value"]["video"],1,"dias")
+            agrupacion=controller.agrupacion_id(Solo_por_categoría["value"]["video"])
+            lista_organizada=controller.videos_por_algo(agrupacion,1,"dias")
             print_separador()
             print_req3(lista_organizada)
             print_separador()

@@ -102,7 +102,7 @@ def newVidcategoria(name, id):
     categoriavid = {'id': id, 'category_id': name}
     return categoriavid
 # Funciones para agregar informacion al catalogo
-def addVideo(catalog, videos,lista_prohibido):
+def addVideo(catalog, videos):
     
     lt.addLast(catalog['video'], videos)
     mp.put(catalog['category_id'], videos['category_id'], videos)
@@ -111,7 +111,7 @@ def addVideo(catalog, videos,lista_prohibido):
     for pais in country:
         addVideosCountry(catalog, pais.strip(), videos)
     for categ in videos_by_category_id:
-        addVideosCategory_id(catalog, categ.strip(),videos,lista_prohibido)
+        addVideosCategory_id(catalog, categ.strip(),videos)
     
 def addVideosCountry(catalog, pais, videos):
 
@@ -127,7 +127,7 @@ def addVideosCountry(catalog, pais, videos):
     country['Size'] += 1
 
 
-def addVideosCategory_id(catalog, catego, videos,lista_prohibido):
+def addVideosCategory_id(catalog, catego, videos):
     
     numcategs = catalog['videos_by_category_id']
     existencicateg = mp.contains(numcategs, catego)
@@ -137,34 +137,11 @@ def addVideosCategory_id(catalog, catego, videos,lista_prohibido):
     else:
         categ = newcateg(catego)
         mp.put(numcategs, catego, categ)
-
-    ID=videos["video_id"]
-    seccion=categ["name"]
-    precencia=lt.isPresent(lista_prohibido,seccion)
+    lt.addLast(categ["video"],videos)
     
-    if precencia>0:
-        sector=lt.getElement(lista_prohibido,1)
-        otraprecencia=lt.isPresent(sector,ID)
-
-        if otraprecencia>0:
-            dias_nuevos=lt.getElement(categ["video"],otraprecencia)
-            dias_nuevos["dias"]+=1
-        else:
-            dato={"ID": ID,"title":videos["title"], "Channel title": videos["channel_title"], "country":videos["country"],"dias":1}
-            lt.addLast(categ["video"],dato)
-            actulizacion=lt.getElement(lista_prohibido,precencia)
-            lt.addLast(actulizacion,ID)
-    else:
-        lt.addLast(lista_prohibido,seccion)
-        elemento=lt.lastElement(lista_prohibido)
-        elemento=lt.newList("ARRAY_LIST")
-        lt.addLast(elemento,ID)
-        dato={"ID": ID,"title":videos["title"], "Channel title": videos["channel_title"], "country":videos["country"],"dias":1}
-        lt.addLast(categ["video"],dato)
+    
         
-   
-   
-
+        
 def addVideoCategory_id(catalog, category):
 
     newtag = newVidcategoria(category['id'], category['name'])

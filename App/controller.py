@@ -74,11 +74,10 @@ def loadVideos(catalog):
     """
     
     """
-    videosfile = cf.data_dir + 'Videos/videos-small.csv'
+    videosfile = cf.data_dir + 'Videos/videos-large.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
-    lista_prohibido=lt.newList(datastructure="ARRAY_LIST")
     for video in input_file:
-        model.addVideo(catalog,video,lista_prohibido)
+        model.addVideo(catalog,video)
         
 
 
@@ -166,7 +165,28 @@ def getMemory():
     toma una muestra de la memoria alocada en instante de tiempo
     """
     return tracemalloc.take_snapshot()
-
+def agrupacion_id(catalog):
+        lista_prohibido=lt.newList(datastructure="ARRAY_LIST")
+        lista_organizada=lt.newList(datastructure="ARRAY_LIST")
+        i=1
+        while i <= lt.size(catalog):
+            videos=lt.getElement(catalog,i)
+            
+            ID=videos["video_id"]
+            dato={"ID": ID,"title":videos["title"], "Channel title": videos["channel_title"], "country":videos["country"],"dias":1}
+            precencia=lt.isPresent(lista_prohibido,ID)
+            
+            if precencia>0:
+                precencia_en_la_main=lt.getElement(lista_prohibido,precencia+1)
+                el_cambio=lt.getElement(lista_organizada,int(precencia_en_la_main))
+                el_cambio["dias"]+=1
+            else:
+                lt.addLast(lista_prohibido,ID)
+                lt.addLast(lista_organizada,dato)
+                a=str(lt.size(lista_organizada))
+                lt.addLast(lista_prohibido,a)
+            i+=1  
+        return lista_organizada
 
 def deltaMemory(start_memory, stop_memory):
     """
