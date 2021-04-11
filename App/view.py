@@ -129,7 +129,7 @@ while True:
             print("No se ha encontrado ningun video del país "+ str(pei))
             print_separador()
         else:
-            videos_por_pais=(controller.Getalgobycatalogyllave(catalog["country"],pei))
+            videos_por_pais=(mp.get(catalog["country"],pei))
             categ=str(input("Escriba el numero de la categoria de los videos que desea consultar: \n"))
             categ=" "+categ
             if mp.contains(catalog["category_id"],str(categ))==False:
