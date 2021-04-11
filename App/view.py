@@ -120,9 +120,6 @@ while True:
         espacio_tiempo=controller.loadData(catalog)
         print ("Videos Cargados "+str(controller.sizeLista(catalog["video"])))
         print ("Categorias cargadas "+str(controller.sizeMapas(catalog["category_id"])))
-        
-        print("Tiempo [ms]: ", f"{espacio_tiempo[0]:.3f}", "  ||  ",
-              "Memoria [kB]: ", f"{espacio_tiempo[1]:.3f}")
 
     elif int(inputs[0]) == 2:
         print_separador()    
@@ -162,6 +159,7 @@ while True:
         categoria=" "+ categoria
         num=mp.get(catalog["category_id"],categoria)
         num=num["value"]["category_id"]
+        print_separador()
         if mp.contains(catalog["videos_by_category_id"],str(num))==False:
             print_separador()
             print("No se ha encontrado la catgoría "+str(categoria))
