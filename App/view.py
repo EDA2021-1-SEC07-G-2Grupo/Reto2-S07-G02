@@ -133,13 +133,15 @@ while True:
             print_separador()
         else:
             videos_por_pais=(controller.Getalgobycatalogyllave(catalog["country"],pei))
-            categ=str(input("Escriba el numero de la categoria de los videos que desea consultar \n"))
+            categ=str(input("Escriba el numero de la categoria de los videos que desea consultar: \n"))
+            categ=" "+categ
             if mp.contains(catalog["category_id"],str(categ))==False:
                 print_separador()
                 print("No se ha encontrado ninguna categoría "+ str (categ))
                 print_separador()
             else:
-                Vids_por_pais_categ=controller.Getvideosbycateg(videos_por_pais,categ)
+                num=mp.get(catalog["category_id"],categ)
+                Vids_por_pais_categ=controller.Getvideosbycateg(videos_por_pais,num["value"]["category_id"])
                 if lt.isEmpty(Vids_por_pais_categ)==True:
                     print(lt.size(Vids_por_pais_categ))
                     print("No se ha encontrado videos de la categoría "+str(categ)+ " del país "+ str(pei))
@@ -150,21 +152,25 @@ while True:
                     imprime_toda_lista_econtrada_req1(lista_organizada,n)
 
     elif int(inputs[0]) == 3:
-        print("req 2")
+        TODO:print("req 2")
+        pass
 
 
     elif int(inputs[0]) == 4:
         print_separador()    
         categoria=str(input("Ingrese la categoría que desea consultar \n"))
-        if mp.contains(catalog["videos_by_category_id"],str(categoria))==False:
+        categoria=" "+ categoria
+        num=mp.get(catalog["category_id"],categoria)
+        num=num["value"]["category_id"]
+        if mp.contains(catalog["videos_by_category_id"],str(num))==False:
             print_separador()
             print("No se ha encontrado la catgoría "+str(categoria))
             print_separador()
         else:
-            Solo_por_categoría=mp.get(catalog["videos_by_category_id"],categoria)
+            
+            Solo_por_categoría=mp.get(catalog["videos_by_category_id"],num)
             agrupacion=controller.agrupacion_id(Solo_por_categoría["value"]["video"])
             print("Cargando información de los archivos ....")
-            print(agrupacion["elements"])
             lista_organizada=controller.videos_por_algo(agrupacion,5,"dias")
             print_separador()
             print_req3(lista_organizada)

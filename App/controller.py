@@ -178,7 +178,6 @@ def agrupacion_id(catalog):
                 precencia_en_la_main=lt.getElement(lista_prohibido,precencia+1)
                 el_cambio=lt.getElement(lista_organizada,int(precencia_en_la_main))
                 el_cambio["dias"]+=1
-                print(el_cambio["dias"])
             else:
                 lt.addLast(lista_prohibido,ID)
                 lt.addLast(lista_organizada,dato)

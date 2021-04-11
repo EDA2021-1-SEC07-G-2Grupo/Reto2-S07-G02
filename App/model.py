@@ -145,8 +145,7 @@ def addVideosCategory_id(catalog, catego, videos,lista_prohibido):
 def addVideoCategory_id(catalog, category):
 
     newtag = newVidcategoria(category['id'], category['name'])
-    mp.put(catalog['category_id'], category['id'], newtag)
-
+    mp.put(catalog['category_id'], category["name"], newtag)
 
 
 
