@@ -49,17 +49,17 @@ def newCatalog():
     catalog['video'] = lt.newList('ARRAY_LIST', comparevideoIds)
 
 
-    catalog['category_id'] = mp.newMap(39,
+    catalog['category_id'] = mp.newMap(100,
                                    maptype='PROBING',
-                                   loadfactor=0.8,
+                                   loadfactor=0.5,
                                    comparefunction=comparebyName)
-    catalog['country'] = mp.newMap(17,
+    catalog['country'] = mp.newMap(34,
                                    maptype='PROBING',
-                                   loadfactor=0.8,
+                                   loadfactor=0.5,
                                    comparefunction=comparebyName)
-    catalog['videos_by_category_id'] = mp.newMap(39,
+    catalog['videos_by_category_id'] = mp.newMap(80,
                                    maptype='PROBING',
-                                   loadfactor=0.8,
+                                   loadfactor=0.5,
                                    comparefunction=comparebyINt)
 
     return catalog
@@ -102,7 +102,7 @@ def newVidcategoria(name, id):
     categoriavid = {'id': id, 'category_id': name}
     return categoriavid
 # Funciones para agregar informacion al catalogo
-def addVideo(catalog, videos):
+def addVideo(catalog, videos,lista_prohibido):
     
     lt.addLast(catalog['video'], videos)
     mp.put(catalog['category_id'], videos['category_id'], videos)
@@ -111,7 +111,7 @@ def addVideo(catalog, videos):
     for pais in country:
         addVideosCountry(catalog, pais.strip(), videos)
     for categ in videos_by_category_id:
-        addVideosCategory_id(catalog, categ.strip(),videos)
+        addVideosCategory_id(catalog, categ.strip(),videos,lista_prohibido)
     
 def addVideosCountry(catalog, pais, videos):
 
@@ -127,7 +127,7 @@ def addVideosCountry(catalog, pais, videos):
     country['Size'] += 1
 
 
-def addVideosCategory_id(catalog, catego, videos):
+def addVideosCategory_id(catalog, catego, videos,lista_prohibido):
     
     numcategs = catalog['videos_by_category_id']
     existencicateg = mp.contains(numcategs, catego)
@@ -136,12 +136,12 @@ def addVideosCategory_id(catalog, catego, videos):
         categ = me.getValue(entry)
     else:
         categ = newcateg(catego)
-        mp.put(numcategs, catego, categ)
+        mp.put(numcategs, catego, categ)      
     lt.addLast(categ["video"],videos)
+         
     
     
-        
-        
+     
 def addVideoCategory_id(catalog, category):
 
     newtag = newVidcategoria(category['id'], category['name'])
@@ -242,7 +242,7 @@ def Getalgobycatalogyllave(catalog, pais):
 
 def videos_por_algo(catalog,size,comparacion):
     sub_list = lt.subList(catalog,0, size)
-    sub_list = sub_list.copy()
+    sub_list = catalog.copy()
     sorted_list=merg.sort(sub_list, comparacion)
     return  sorted_list
 

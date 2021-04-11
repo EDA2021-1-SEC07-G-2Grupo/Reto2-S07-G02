@@ -76,8 +76,9 @@ def loadVideos(catalog):
     """
     videosfile = cf.data_dir + 'Videos/videos-large.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
+    lista_prohibido=lt.newList(datastructure="ARRAY_LIST")
     for video in input_file:
-        model.addVideo(catalog,video)
+        model.addVideo(catalog,video,lista_prohibido)
         
 
 
@@ -101,8 +102,9 @@ def videos_por_algo(catalog,size,comparacion):
         comparacion=cmpVideosByviews
     elif comparacion=="dias":
          def cmpVideosBydias(video1, video2):
-
              return (float(video1["dias"]) > float(video2["dias"]))
+         comparacion=cmpVideosBydias
+
     elif comparacion=="likes":
          def cmpVideosBylikes(video1, video2):
 
@@ -138,9 +140,7 @@ def Getvideosbycateg(catalog,numero):
         if numero==wow["category_id"] or str(numero)== wow ["category_id"]:
             lt.addLast(lista_filtrada, wow)
         i+=1
-   #def comparecategorynames(numero, wow):
-        #return (numero == wow["category_id"])
-    #lista_filtrada=lt.newList("ARRAY_LIST",cmpfunction=comparecategorynames)"""
+   
     return lista_filtrada
 
 
@@ -171,15 +171,14 @@ def agrupacion_id(catalog):
         i=1
         while i <= lt.size(catalog):
             videos=lt.getElement(catalog,i)
-            
             ID=videos["video_id"]
             dato={"ID": ID,"title":videos["title"], "Channel title": videos["channel_title"], "country":videos["country"],"dias":1}
             precencia=lt.isPresent(lista_prohibido,ID)
-            
             if precencia>0:
                 precencia_en_la_main=lt.getElement(lista_prohibido,precencia+1)
                 el_cambio=lt.getElement(lista_organizada,int(precencia_en_la_main))
                 el_cambio["dias"]+=1
+                print(el_cambio["dias"])
             else:
                 lt.addLast(lista_prohibido,ID)
                 lt.addLast(lista_organizada,dato)
