@@ -55,6 +55,13 @@ def imprime_toda_lista_econtrada_req1(catalog,size):
             print(print_separador())
             n+=1
 
+def print_req2(catalog):
+    vid=lt.getElement(catalog,1)
+    print("-"+"Title: "+vid["title"])
+    print("-"+"Channel title: "+vid["Channel title"])
+    print("-"+"Country: "+vid["country"])
+    print("-"+"Días: "+str(vid["dias"]))
+
 def print_req3(catalog):
     vid=lt.getElement(catalog,1)
     print("-"+"Title: "+vid["title"])
@@ -149,8 +156,23 @@ while True:
                     imprime_toda_lista_econtrada_req1(lista_organizada,n)
 
     elif int(inputs[0]) == 3:
-        TODO:print("req 2")
-        pass
+        print_separador()    
+        pais=str(input("Ingrese el país que desea consultar \n"))
+        num=mp.get(catalog["country"],pais)
+        num=num["value"]["country"]
+        print_separador()
+        if mp.contains(catalog["videos_by_category_id"],str(num))==False:
+            print_separador()
+            print("No se ha encontrado el pais "+str(pais))
+            print_separador()
+        else:
+            solo_por_pais=mp.get(catalog["videos_by_category_id"],num)
+            agrupacion=controller.agrupacion_id(solo_por_pais["value"]["video"])
+            print("Cargando información de los archivos ....")
+            lista_organizada=controller.videos_por_algo(agrupacion,5,"dias")
+            print_separador()
+            print_req2(lista_organizada)
+            print_separador()
 
 
     elif int(inputs[0]) == 4:

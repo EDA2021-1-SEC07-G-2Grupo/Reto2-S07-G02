@@ -74,7 +74,7 @@ def loadVideos(catalog):
     """
     
     """
-    videosfile = cf.data_dir + 'Videos/videos-large.csv'
+    videosfile = cf.data_dir + 'Videos/videos-5pct.csv'
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
     lista_prohibido=lt.newList(datastructure="ARRAY_LIST")
     for video in input_file:
