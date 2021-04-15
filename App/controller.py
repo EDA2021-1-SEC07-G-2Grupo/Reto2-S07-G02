@@ -74,7 +74,11 @@ def loadVideos(catalog):
     """
     
     """
+<<<<<<< HEAD
     videosfile = cf.data_dir + 'Videos/videos-5pct.csv'
+=======
+    videosfile = cf.data_dir + 'Videos/videos-small.csv'
+>>>>>>> 43988e80c8662d4f60807352ec72c16e2f391ae1
     input_file = csv.DictReader(open(videosfile, encoding='utf-8'))
     lista_prohibido=lt.newList(datastructure="ARRAY_LIST")
     for video in input_file:
